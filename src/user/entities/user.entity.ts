@@ -4,8 +4,9 @@ import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn,   
 
 @Entity()
 export class User {
-    @PrimaryGeneratedColumn({name: 'name_id'})
-    id:number
+    @PrimaryGeneratedColumn({ name: 'name_id' })
+    id: number;
+    
 
     @Column()
     email: string
