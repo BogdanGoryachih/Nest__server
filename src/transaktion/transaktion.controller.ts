@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, UseGuards, Req, Query } from '@nestjs/common';
 import { TransaktionService } from './transaktion.service';
 import { CreateTransaktionDto } from './dto/create-transaktion.dto';
 import { UpdateTransaktionDto } from './dto/update-transaktion.dto';
@@ -8,12 +8,20 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 export class TransaktionController {
   constructor(private readonly transaktionService: TransaktionService) {}
 
+  
+
   @Post()
   @UseGuards(JwtAuthGuard)
   @UsePipes(new ValidationPipe())
 
   create(@Body() createTransaktionDto: CreateTransaktionDto,@Req()req) {
     return this.transaktionService.create(createTransaktionDto, +req.user.id);
+  }
+
+  @Get('pagination')
+  @UseGuards(JwtAuthGuard)
+  findAllWithPagination(@Req() req, @Query('page') page:number=1 , @Query('limit') limit:number=3){
+    return this.transaktionService.findAllWithPagination(+req.user.id , +page, +limit)
   }
 
   @Get()
@@ -39,4 +47,5 @@ export class TransaktionController {
   remove(@Param('id') id: string) {
     return this.transaktionService.remove(+id);
   }
+  
 }
